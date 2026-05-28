@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vendidit — New Project</title>
+
+<!--
+  ┌─────────────────────────────────────────────────────────────┐
+  │  EDIT THESE LINES ONLY                                        │
+  │  1. FORM_URL     →  paste your Notion New Project form link   │
+  │  2. BUTTON_LABEL →  the big text on the banner                │
+  │  3. SUBLINE      →  the small text under it (or set to "")    │
+  └─────────────────────────────────────────────────────────────┘
+-->
+<script>
+  const FORM_URL     = "https://www.notion.so/your-form-link-here";
+  const BUTTON_LABEL = "New Project";
+  const SUBLINE      = "Open the project intake form";
+</script>
+
+<style>
+  :root {
+    --vendidit-blue: #385DF5;
+    --indigo:        #718CF8;
+    --check-indigo:  #536FE1;
+    --check-cyan:    #8BDDD0;
+    --navy:          #1D2639;
+    --white:         #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: transparent;            /* blends into the Notion page */
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 18px;
+  }
+
+  /* Full-width banner button */
+  .cta {
+    position: relative;
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 26px 30px;
+    border-radius: 22px;
+    text-decoration: none;
+    color: var(--white);
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(139,221,208,0.35) 0%, transparent 45%),
+      linear-gradient(125deg, var(--vendidit-blue) 0%, var(--check-indigo) 55%, #2f50d6 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.22) inset,
+      0 18px 40px -12px rgba(56,93,245,0.60),
+      0 6px 14px -6px rgba(29,38,57,0.35);
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease;
+    opacity: 0;
+    animation: rise 0.75s cubic-bezier(0.22,1,0.36,1) 0.05s forwards;
+  }
+
+  /* Faint geometric texture for depth */
+  .cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.10) 1px, transparent 0);
+    background-size: 22px 22px;
+    z-index: -1;
+    opacity: 0.6;
+  }
+
+  /* Sheen sweep on hover */
+  .cta::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -130%;
+    width: 55%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.30), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+  }
+
+  .cta:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.28) inset,
+      0 28px 55px -14px rgba(56,93,245,0.66),
+      0 8px 18px -6px rgba(29,38,57,0.38);
+  }
+  .cta:hover::after { left: 140%; }
+  .cta:active { transform: translateY(-1px) scale(0.995); }
+
+  .cta:focus-visible {
+    outline: 3px solid var(--check-cyan);
+    outline-offset: 4px;
+  }
+
+  /* Icon badge on the left */
+  .badge {
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.16);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset;
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1);
+  }
+  .cta:hover .badge { transform: scale(1.06) rotate(-4deg); }
+
+  .copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .label {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: 0.005em;
+    line-height: 1.1;
+  }
+  .subline {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.82);
+  }
+
+  /* Chevron on the right */
+  .chevron {
+    flex: 0 0 auto;
+    display: inline-flex;
+    opacity: 0.9;
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1);
+  }
+  .cta:hover .chevron { transform: translateX(5px); }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 460px) {
+    .cta { gap: 16px; padding: 20px 20px; border-radius: 18px; }
+    .badge { width: 48px; height: 48px; border-radius: 13px; }
+    .label { font-size: 21px; }
+    .subline { font-size: 13px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta { animation: none; opacity: 1; }
+    .cta, .badge, .chevron { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="stage">
+    <a class="cta" id="cta" href="#" target="_blank" rel="noopener noreferrer"
+       aria-label="New Project">
+      <span class="badge" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor"
+                stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="copy">
+        <span class="label" id="ctaLabel">New Project</span>
+        <span class="subline" id="ctaSub">Open the project intake form</span>
+      </span>
+      <span class="chevron" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <path d="M9 6l6 6-6 6" stroke="currentColor"
+                stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+  </main>
+
+<script>
+  // Wires up the config values above. No need to touch this.
+  (function () {
+    const btn = document.getElementById("cta");
+    btn.href = FORM_URL;
+    btn.setAttribute("aria-label", BUTTON_LABEL);
+    document.getElementById("ctaLabel").textContent = BUTTON_LABEL;
+    const sub = document.getElementById("ctaSub");
+    if (SUBLINE && SUBLINE.trim()) { sub.textContent = SUBLINE; }
+    else { sub.remove(); }
+  })();
+</script>
+</body>
+</html>
